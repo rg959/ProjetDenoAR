@@ -1,11 +1,15 @@
 import { UserDB } from '../db/UserBD.ts';
 
+// Import roles
 import { roleTypes } from '../types/rolesTypes.ts'
 import { sexeTypes } from '../types/sexeTypes.ts'
 import { subscribeTypes } from '../types/subscribeTypes.ts'
 
+// Import
+import { hash } from '../helpers/password.helper.ts'
+
 export class UserModel extends UserDB {
-    _role: roleTypes;
+    role: roleTypes;
     email: string
     lastname: string
     firstname: string
@@ -13,10 +17,13 @@ export class UserModel extends UserDB {
     date_naissance: Date
     sexe: sexeTypes
     subStatus: subscribeTypes
+    token: string
+    nbTry: number
+    cooldownDate: Date
 
     constructor(email: string, password: string, lastname: string, firstname: string, date_naissance: string, sexe: sexeTypes) {
         super();
-        this._role = "Tuteur";
+        this.role = "Tuteur";
         this.email = email;
         this.lastname = lastname;
         this.firstname = firstname;
@@ -24,6 +31,9 @@ export class UserModel extends UserDB {
         this.date_naissance = new Date(date_naissance);
         this.sexe = sexe
         this.subStatus = "default"
+        this.token = ""
+        this.nbTry = 0
+        this.cooldownDate = new Date(Date.parse('01 Jan 1970 00:00:00'))
     }
 
     /*
@@ -32,11 +42,11 @@ export class UserModel extends UserDB {
     }
     */
 
-    get role() {
-        return this._role;
+    getRole() {
+        return this.role;
     }
     setRole(role: roleTypes) {
-        this._role = role;
+        this.role = role;
     }
     getAge() {
         var ageDifMs = Date.now() - this.date_naissance.getTime();
@@ -81,10 +91,13 @@ export class UserModel extends UserDB {
             subStatus : this.subStatus
         });
         */
+        console.log("hash password")
+        const hPass = await hash(this.password)
+        console.log(hPass)
         await this.userdb.insertOne({
-            role: this._role,
+            role: this.role,
             email: this.email,
-            password: this.password,
+            password: hPass,
             lastname: this.lastname,
             firstname: this.firstname,
             dateNaiss: this.date_naissance,

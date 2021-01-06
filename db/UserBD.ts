@@ -1,6 +1,8 @@
 import { db } from './db.ts';
+import UserInterfaces from "../interfaces/UserInterfaces.ts"
+
 export class UserDB {
-    userdb = db.collection("user")
+    userdb = db.collection < UserInterfaces > ("user")
     constructor() {
         this.userdb = this.userdb
     }
