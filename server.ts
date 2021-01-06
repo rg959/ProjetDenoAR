@@ -1,22 +1,22 @@
-import * as expressive from "https://raw.githubusercontent.com/NMathar/deno-express/master/mod.ts";
+import { opine } from "https://deno.land/x/opine@1.0.2/mod.ts";
+import { routes } from "./routes/index.ts"
 
 const port = 8001;
-const app = new expressive.App();
+const app = opine();
+
+app.use('/', routes)
 
 import { UserModel } from './models/UserModel.ts';
 
-// route with dynamic parameter
-app.get("/test", async(req, res) => {
-    await res.json([
-        { message : "Bonjour, ProjetNodeAR !" },
-    ]);
-});
 
+/*
 let user = new UserModel('SG@mail.com', 'bonjour', 'Steins', 'Gate', '2009-10-15', "Femme");
-user.insert();
-console.log(user);
 
-const server = await app.listen(port);
+if (await user.checkEmail('SG@mail.com') == true)
+    user.insert();
+*/
 
+//console.log(user);
 // deno run --allow-net --allow-read --unstable server.ts
-console.log("ProjetNodeAR listening on port : " + server.port);
+app.listen(port);
+console.log("server running on port " + port)

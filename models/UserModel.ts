@@ -11,12 +11,12 @@ export class UserModel extends UserDB {
     firstname: string
     password: string
     date_naissance: Date
-    sexe : sexeTypes
-    subStatus : subscribeTypes
+    sexe: sexeTypes
+    subStatus: subscribeTypes
 
-    constructor(email : string, password : string, lastname : string, firstname : string,  date_naissance : string, sexe : sexeTypes) {
+    constructor(email: string, password: string, lastname: string, firstname: string, date_naissance: string, sexe: sexeTypes) {
         super();
-        this._role = "User";
+        this._role = "Tuteur";
         this.email = email;
         this.lastname = lastname;
         this.firstname = firstname;
@@ -46,6 +46,28 @@ export class UserModel extends UserDB {
     fullName() {
         return `${this.lastname} ${this.firstname}`;
     }
+
+    async checkEmail(iEmail: string) {
+
+        // Test if it's a valid email
+        const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        if (!reg.test(iEmail.toLowerCase().trim())) {
+            return false
+        }
+        else {
+            const result = await this.userdb.findOne({ email: iEmail });
+            // Check if this email is already used
+            if (result == undefined) {
+                return true
+            }
+            else {
+                return false
+            }
+        }
+
+
+    }
+
     async insert() {
         /*
         this.id = await this.userdb.insertOne({
@@ -60,15 +82,15 @@ export class UserModel extends UserDB {
         });
         */
         await this.userdb.insertOne({
-        role: this._role,
-        email: this.email,
-        password: this.password,
-        lastname: this.lastname,
-        firstname: this.firstname,
-        dateNaiss: this.date_naissance,
-        sexe: this.sexe,
-        subStatus : this.subStatus
-    });
+            role: this._role,
+            email: this.email,
+            password: this.password,
+            lastname: this.lastname,
+            firstname: this.firstname,
+            dateNaiss: this.date_naissance,
+            sexe: this.sexe,
+            subStatus: this.subStatus
+        });
     }
     update() {
         throw new Error('Method not implemented.');
