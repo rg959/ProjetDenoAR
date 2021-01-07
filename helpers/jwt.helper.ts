@@ -20,6 +20,30 @@ const getAuthToken = async (iData: any) => {
 
     return await create(header, payload, JWT_TOKEN_SECRET);
 };
+/*
+const updateAuthToken = async (email: string, token: string) => {
+    const payload: any = {
+        email: iData
+    };
+
+    return await create(header, payload, JWT_TOKEN_SECRET);
+};
+/*
+async updateUserToken(email: string, token: string) {
+    const result = await this.checkEmail(email)
+    if (result == {error: false, message: "already used email"})
+    {
+        let token = await jwt.getAuthToken(email)
+        await this.userdb.updateOne(
+            { email: email },
+            { $set: { token: token } }
+        );
+        return true
+    }
+    else 
+        return false
+}
+*/
 
 const getRefreshToken = async(user: any) => {
     const payload: any = {

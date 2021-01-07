@@ -25,24 +25,26 @@ login.post("/login", syntaxMiddleware ,async  function (req, res) {
     }
     else
     {
-        let token = await jwt.getAuthToken(result.email)
+        let userM:any = await UserModel.getUser(result.email)
         await comparePass(req.body.password, result.password).then(isOk => {
             if (isOk) {
-                let user = {
-                    firstname: result.firstname,
-                    lastname: result.lastname,
-                    email: result.email,
-                    sexe: result.sexe,
-                    role: result.role,
-                    dateNaissance: result.dateNaiss
-
-                }
-                res.send({
-                    error: false,
-                    user: user,
-                    token: token
+                // Since this async method is not at the top level we need to use this
+                const majToken = (async()=> await userM.updateUserToken())()
+                majToken.then(()=>{
+                    let user = {
+                        firstname: result.firstname,
+                        lastname: result.lastname,
+                        email: result.email,
+                        sexe: result.sexe,
+                        role: result.role,
+                        dateNaissance: result.dateNaiss
+                    }
+                    res.send({
+                        error: false,
+                        user: user,
+                        token: userM.token
+                    })
                 })
-
             }
             else {
                 sendReturn(res, 400, {
