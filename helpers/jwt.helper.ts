@@ -20,6 +20,8 @@ const getAuthToken = async (iData: any) => {
 
     return await create(header, payload, JWT_TOKEN_SECRET);
 };
+
+
 /*
 const updateAuthToken = async (email: string, token: string) => {
     const payload: any = {
@@ -58,8 +60,9 @@ const getRefreshToken = async(user: any) => {
 const getJwtPayload = async(token: string): Promise < any | null > => {
     try {
         const jwtObject = await verify(token, JWT_TOKEN_SECRET, header.alg);
-        if (jwtObject && jwtObject.payload) {
-            return jwtObject.payload;
+        console.log(jwtObject)
+        if (jwtObject) {
+            return jwtObject;
         }
     } catch (err) {}
     return null;
