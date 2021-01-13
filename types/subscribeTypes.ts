@@ -1,1 +1,1 @@
-export type subscribeTypes = "default" | "subscribed";
+export type subscribeTypes = 0 | 1 | 2;

@@ -8,13 +8,13 @@ const sessionMiddleware = opine();
 
 sessionMiddleware.use(async function (req: any, res, next) {
     let data: any = req.body;
-    // empty/invalid sended data case
+
     let token =  req.get("Authorization").split(" ")[1]
     let tokenPayload = await jwt.getJwtPayload(token)
     if(tokenPayload != null)
     {
         // If the token is valid then we can use define the email in the req.body for a more easy usage in the routes
-        req.body.email = tokenPayload
+        req.body.email = tokenPayload.email
         next();
     }
     else

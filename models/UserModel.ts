@@ -21,11 +21,12 @@ export class UserModel extends UserDB {
     role?: roleTypes;
     createdAt?: Date
     updateAt?: Date
-    subStatus?: subscribeTypes
+    subscription?: subscribeTypes
     token?: string
     nbTry?: number
     cooldownDate?: Date
     nbChild?: number
+    tuteur?: string
 
     // optionnalData = role: roleTypes, password: string, lastname: string, firstname: string, date_naissance: string, sexe: sexeTypes
 
@@ -44,20 +45,22 @@ export class UserModel extends UserDB {
         if (optionnalData)
         {
             this.updateAt = optionnalData.updateAt != undefined ? optionnalData.updateAt : new Date(Date.now())
-            this.subStatus = optionnalData.subStatus != undefined ? optionnalData.subStatus : "default"
+            this.subscription = optionnalData.subscription != undefined ? optionnalData.subscription : 0
             this.token = optionnalData.token != undefined ? optionnalData.token : ""
             this.nbTry = optionnalData.nbTry != undefined ? optionnalData.nbTry : 0
             this.cooldownDate = optionnalData.cooldownDate != undefined ? optionnalData.cooldownDate :  new Date(Date.parse('01 Jan 1970 00:00:00'))
             this.nbChild = optionnalData.nbChild != undefined ? optionnalData.nbChild :  0
+            this.tuteur = optionnalData.tuteur != undefined ? optionnalData.tuteur :  ""
         }
         else
         {
             this.updateAt = new Date(Date.now())
-            this.subStatus = "default"
+            this.subscription = 0
             this.token = ""
             this.nbTry = 0
             this.cooldownDate = new Date(Date.parse('01 Jan 1970 00:00:00'))
             this.nbChild = 0
+            this.tuteur = ""
         }
         
     }
@@ -71,10 +74,12 @@ export class UserModel extends UserDB {
             if (result != undefined) {
                 const optionnalData = {
                     updateAt: result.updateAt,
-                    subStatus: result.subStatus,
+                    subscription: result.subscription,
                     token: result.token,
                     nbTry: result.nbTry,
                     cooldownDate: result.cooldownDate,
+                    nbChild: result.nbChild,
+                    tuteur: result.tuteur
                 }
                 return new UserModel(result.role, result.email, result.password, result.lastname, result.firstname, result.date_naissance, result.sexe, optionnalData)
             }
@@ -103,8 +108,15 @@ export class UserModel extends UserDB {
         var ageDate = new Date(ageDifMs);
         return Math.abs(ageDate.getUTCFullYear() - 1970);
     }
-    fullName() {
-        return `${this.lastname} ${this.firstname}`;
+    async addChild() {
+        if (this.nbChild != undefined)
+        {
+            this.nbChild = this.nbChild + 1
+            await this.userdb.updateOne(
+                { email: this.email },
+                { $set: { nbChild: this.nbChild } }
+            );
+        }
     }
 
     public async checkEmail(email: string) {
@@ -138,14 +150,15 @@ export class UserModel extends UserDB {
             date_naissance: this.date_naissance,
             sexe: this.sexe,
 
-            role: "Tuteur",
-            subStatus:  "default",
-            createdAt: new Date(Date.now()),
-            updateAt: new Date(Date.now()),
-            token: "",
-            nbTry: 0,
-            cooldownDate: new Date(Date.parse('01 Jan 1970 00:00:00')),
-            nbChild: 0
+            role: this.role,
+            subscription:  this.subscription,
+            createdAt: this.createdAt,
+            updateAt: this.updateAt,
+            token: this.token,
+            nbTry: this.nbTry,
+            cooldownDate: this.cooldownDate,
+            nbChild: this.nbChild,
+            tuteur: this.tuteur
         });
     }
 

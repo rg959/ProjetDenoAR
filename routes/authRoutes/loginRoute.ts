@@ -37,7 +37,7 @@ login.post("/login", syntaxMiddleware ,async  function (req, res) {
                         email: result.email,
                         sexe: result.sexe,
                         role: result.role,
-                        dateNaissance: result.dateNaiss
+                        dateNaissance: result.date_naissance
                     }
                     res.send({
                         error: false,

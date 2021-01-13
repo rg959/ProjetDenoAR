@@ -12,10 +12,10 @@ app.use('/', routes)
 import { UserModel } from './models/UserModel.ts';
 
 // Test user registeration without the register route
-/*
 
+/*
 let date_naissance = new Date('2009-10-15')
-let user = new UserModel('SG@mail.com', 'bonjour', 'Steins', 'Gate', date_naissance, "Femme");
+let user = new UserModel("Tuteur", 'SG@mail.com', 'bonjour', 'Steins', 'Gate', date_naissance, "Femme");
 
 if (await user.checkEmail('SG@mail.com') == true)
     user.insert();
