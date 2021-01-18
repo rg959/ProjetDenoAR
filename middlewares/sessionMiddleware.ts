@@ -7,14 +7,15 @@ import * as jwt from '../helpers/jwt.helper.ts'
 const sessionMiddleware = opine();
 
 sessionMiddleware.use(async function (req: any, res, next) {
-    let data: any = req.body;
 
     let token =  req.get("Authorization").split(" ")[1]
     let tokenPayload = await jwt.getJwtPayload(token)
     if(tokenPayload != null)
     {
+        console.log(req.body.email)
         // If the token is valid then we can use define the email in the req.body for a more easy usage in the routes
-        req.body.email = tokenPayload.email
+        req.body.emailToken = tokenPayload.email
+
         next();
     }
     else

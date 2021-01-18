@@ -15,7 +15,7 @@ const login = opine();
 
 login.post("/login", syntaxMiddleware ,async  function (req, res) {
     // NEED TO BE CHANGED
-    const result:any = await userdb.findOne({ email: req.body.email });
+    const result:any = await userdb.findOne({ email: req.body.emailToken });
     if (result == undefined)
     {
         sendReturn(res, 400, {
@@ -39,6 +39,7 @@ login.post("/login", syntaxMiddleware ,async  function (req, res) {
                         role: result.role,
                         dateNaissance: result.date_naissance
                     }
+                    res.status = 200
                     res.send({
                         error: false,
                         user: user,

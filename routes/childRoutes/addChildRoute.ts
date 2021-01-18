@@ -1,26 +1,30 @@
 import { opine } from "https://deno.land/x/opine@1.0.2/mod.ts";
 
 import { sendReturn } from "../../helpers/sendReturn.helper.ts"
+
+import { syntaxMiddleware } from "../../middlewares/syntaxMiddleware.ts";
 import { sessionMiddleware } from "../../middlewares/sessionMiddleware.ts"
+import { roleMiddleware } from "../../middlewares/roleMiddleware.ts";
+
 import { UserModel } from '../../models/UserModel.ts'
 
 const addChild = opine();
 
-addChild.post("/user/child" , sessionMiddleware ,async function (req, res) {
+addChild.post("/user/child", syntaxMiddleware, sessionMiddleware, roleMiddleware, async function (req, res) {
 
-    console.log("entrée ")
     console.log(req.body)
-    let userT: any = await UserModel.getUser(req.body.email)
-    console.log("utilisateur récupéré")
+    let userT: any = await UserModel.getUser(req.body.emailToken)
     if (userT.nbChild < 3) {
         userT.addChild()
-        console.log("succès 1")
         // Add child
+        let optionnalData = {
+            tuteur: req.body.emailToken
+        }
         let date_naissance = new Date(req.body.date_naissance)
-        let userM = new UserModel('Enfant', req.body.email, req.body.password, req.body.lastname, req.body.firstname, date_naissance, req.body.sexe);
+        let userM = new UserModel('Enfant', req.body.email, req.body.password, req.body.lastname, req.body.firstname, date_naissance, req.body.sexe, optionnalData);
 
         userM.insert();
-        console.log("Insert 1")
+
         let user = {
             firstname: userM.firstname,
             lastname: userM.lastname,

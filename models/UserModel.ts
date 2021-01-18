@@ -100,6 +100,7 @@ export class UserModel extends UserDB {
     getRole() {
         return this.role;
     }
+    
     setRole(role: roleTypes) {
         this.role = role;
     }
@@ -112,6 +113,16 @@ export class UserModel extends UserDB {
         if (this.nbChild != undefined)
         {
             this.nbChild = this.nbChild + 1
+            await this.userdb.updateOne(
+                { email: this.email },
+                { $set: { nbChild: this.nbChild } }
+            );
+        }
+    }
+    async removeChild() {
+        if (this.nbChild != undefined)
+        {
+            this.nbChild = this.nbChild - 1
             await this.userdb.updateOne(
                 { email: this.email },
                 { $set: { nbChild: this.nbChild } }

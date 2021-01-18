@@ -14,8 +14,8 @@ other.get("/test", function (req, res) {
 });
 
 
-other.get("/testToken" , sessionMiddleware ,async function (req, res) {
-    console.log(req.body.email)
+other.post("/testToken" , sessionMiddleware ,async function (req, res) {
+    console.log(req.body.emailToken)
     sendReturn(res, 200, {
         error: false,
         message: "Bonjour ProjetDenoAR (connected)"
