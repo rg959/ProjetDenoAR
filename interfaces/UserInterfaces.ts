@@ -3,10 +3,7 @@ import { sexeTypes } from '../types/sexeTypes.ts'
 import { subscribeTypes } from '../types/subscribeTypes.ts'
 
 
-export default interface UserInterfaces {
-
-    _id: { $oid: string } | null | string;
-
+export default interface UserModelInterface {
     role: roleTypes;
     email: string
     lastname: string
@@ -14,11 +11,25 @@ export default interface UserInterfaces {
     password: string
     date_naissance: Date
     sexe: sexeTypes
-    subStatus: subscribeTypes
+
+
+    createdAt: Date
+    updateAt: Date
+    subscription: subscribeTypes
     token: string
     nbTry: number
     cooldownDate: Date
+    nbChild: number
+    tuteur: string
 
-    getAge(): Number;
-
+    updateUserToken() : void
+    getRole() : roleTypes
+    setRole(role: roleTypes) : void
+    getAge() : number
+    addChild() : void
+    removeChild() : void
+    checkEmail(email: string) : any
+    insert() : void
+    update() : void
+    delete() : void
 }

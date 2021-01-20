@@ -11,6 +11,7 @@ import * as jwt from '../helpers/jwt.helper.ts'
 
 export class UserModel extends UserDB {
     
+    role: roleTypes;
     email: string
     lastname: string
     firstname: string
@@ -18,15 +19,15 @@ export class UserModel extends UserDB {
     date_naissance: Date
     sexe: sexeTypes
 
-    role?: roleTypes;
-    createdAt?: Date
-    updateAt?: Date
-    subscription?: subscribeTypes
-    token?: string
-    nbTry?: number
-    cooldownDate?: Date
-    nbChild?: number
-    tuteur?: string
+    
+    createdAt: Date
+    updateAt: Date
+    subscription: subscribeTypes
+    token: string
+    nbTry: number
+    cooldownDate: Date
+    nbChild: number
+    tuteur: string
 
     // optionnalData = role: roleTypes, password: string, lastname: string, firstname: string, date_naissance: string, sexe: sexeTypes
 
@@ -44,6 +45,7 @@ export class UserModel extends UserDB {
         // Optionnal parameters (not required for an user insert)
         if (optionnalData)
         {
+            this.createdAt = optionnalData.createdAt != undefined ? optionnalData.createdAt : new Date(Date.now())
             this.updateAt = optionnalData.updateAt != undefined ? optionnalData.updateAt : new Date(Date.now())
             this.subscription = optionnalData.subscription != undefined ? optionnalData.subscription : 0
             this.token = optionnalData.token != undefined ? optionnalData.token : ""
@@ -54,6 +56,7 @@ export class UserModel extends UserDB {
         }
         else
         {
+            this.createdAt = new Date(Date.now())
             this.updateAt = new Date(Date.now())
             this.subscription = 0
             this.token = ""
@@ -94,7 +97,6 @@ export class UserModel extends UserDB {
                 { email: this.email },
                 { $set: { token: this.token } }
             );
-            return true
     }
 
     getRole() {

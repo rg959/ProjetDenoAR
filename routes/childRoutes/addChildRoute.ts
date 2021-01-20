@@ -2,18 +2,20 @@ import { opine } from "https://deno.land/x/opine@1.0.2/mod.ts";
 
 import { sendReturn } from "../../helpers/sendReturn.helper.ts"
 
+import { emptyValueMiddleware } from "../../middlewares/emptyValueMiddleware.ts";
 import { syntaxMiddleware } from "../../middlewares/syntaxMiddleware.ts";
 import { sessionMiddleware } from "../../middlewares/sessionMiddleware.ts"
 import { roleMiddleware } from "../../middlewares/roleMiddleware.ts";
 
 import { UserModel } from '../../models/UserModel.ts'
+import UserModelInterface from "../../interfaces/UserInterfaces.ts";
 
 const addChild = opine();
 
-addChild.post("/user/child", syntaxMiddleware, sessionMiddleware, roleMiddleware, async function (req, res) {
+addChild.post("/user/child", emptyValueMiddleware, syntaxMiddleware, sessionMiddleware, roleMiddleware, async function (req, res) {
 
     console.log(req.body)
-    let userT: any = await UserModel.getUser(req.body.emailToken)
+    let userT : UserModelInterface = await UserModel.getUser(req.body.emailToken)
     if (userT.nbChild < 3) {
         userT.addChild()
         // Add child

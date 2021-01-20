@@ -4,13 +4,15 @@ import { sendReturn } from "../helpers/sendReturn.helper.ts"
 import { UserModel } from '../models/UserModel.ts'
 
 import { db } from '../db/db.ts';
+import UserModelInterface from "../interfaces/UserInterfaces.ts";
 const userdb = db.collection("user")
 
 
 const roleMiddleware = opine();
 
-roleMiddleware.use(async function (req: any, res, next) {
-    let userT: any = await UserModel.getUser(req.body.emailToken)
+roleMiddleware.use(async function (req, res, next) {
+
+    let userT:UserModelInterface = await UserModel.getUser(req.body.emailToken)
     if (userT.getRole() == "Enfant")
         sendReturn(res, 403, {
             error: true,

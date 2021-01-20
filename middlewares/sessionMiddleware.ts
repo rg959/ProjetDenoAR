@@ -6,7 +6,7 @@ import * as jwt from '../helpers/jwt.helper.ts'
 
 const sessionMiddleware = opine();
 
-sessionMiddleware.use(async function (req: any, res, next) {
+sessionMiddleware.use(async function (req : any, res, next) {
 
     let token =  req.get("Authorization").split(" ")[1]
     let tokenPayload = await jwt.getJwtPayload(token)

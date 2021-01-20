@@ -8,54 +8,19 @@ const {
     JWT_REFRESH_TOKEN_EXP,
 } = config;
 
-const header: any = {
+const header : any = {
     alg: "HS256",
     typ: "JWT",
 };
 
-const getAuthToken = async (iData: any) => {
-    const payload: any = {
+const getAuthToken = async (iData: string) => {
+    const payload = {
         email: iData
     };
 
     return await create(header, payload, JWT_TOKEN_SECRET);
 };
 
-
-/*
-const updateAuthToken = async (email: string, token: string) => {
-    const payload: any = {
-        email: iData
-    };
-
-    return await create(header, payload, JWT_TOKEN_SECRET);
-};
-/*
-async updateUserToken(email: string, token: string) {
-    const result = await this.checkEmail(email)
-    if (result == {error: false, message: "already used email"})
-    {
-        let token = await jwt.getAuthToken(email)
-        await this.userdb.updateOne(
-            { email: email },
-            { $set: { token: token } }
-        );
-        return true
-    }
-    else 
-        return false
-}
-*/
-
-const getRefreshToken = async(user: any) => {
-    const payload: any = {
-        iss: "deno-imie-api",
-        id: user.id,
-        exp: getNumericDate(new Date().getTime() + parseInt(JWT_REFRESH_TOKEN_EXP)),
-    };
-
-    return await create(header, payload, JWT_TOKEN_SECRET);
-};
 
 const getJwtPayload = async(token: string): Promise < any | null > => {
     try {
@@ -68,4 +33,4 @@ const getJwtPayload = async(token: string): Promise < any | null > => {
     return null;
 };
 
-export { getAuthToken, getRefreshToken, getJwtPayload };
+export { getAuthToken, getJwtPayload };

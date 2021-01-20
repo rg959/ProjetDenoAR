@@ -10,6 +10,7 @@ app.use(urlencoded()); // for parsing application/x-www-form-urlencoded
 app.use('/', routes)
 
 import { UserModel } from './models/UserModel.ts';
+import UserModelInterface from "./interfaces/UserInterfaces.ts";
 
 // Test user registeration without the register route
 
@@ -22,7 +23,7 @@ if (await user.checkEmail('SG@mail.com') == true)
 */
 
 /*
-let user:any = await UserModel.getUser('SG@mail.com')
+let user:UserModelInterface = await UserModel.getUser('SG@mail.com')
 console.log("user :::::")
 console.log(user)
 */
@@ -31,5 +32,6 @@ console.log(user)
 
 
 // deno run --allow-net --allow-read --unstable server.ts
+// denon run --allow-net --allow-read --unstable server.ts
 app.listen(port);
 console.log("server running on port " + port)
