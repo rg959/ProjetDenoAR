@@ -8,8 +8,10 @@ const {
     JWT_REFRESH_TOKEN_EXP,
 } = config;
 
+
+// Since we need to use a token between 50 and 90 characters we remove the alg
 const header : any = {
-    alg: "HS256",
+    alg: "none",
     typ: "JWT",
 };
 
