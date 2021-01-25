@@ -10,11 +10,15 @@ app.use(urlencoded()); // for parsing application/x-www-form-urlencoded
 app.use('/', routes)
 
 import { UserModel } from './models/UserModel.ts';
+import { BillModel } from './models/BillModel.ts'
 import UserModelInterface from "./interfaces/UserInterfaces.ts";
 
 // Test user registeration without the register route
-
 /*
+let date_payement = new Date('2021-01-25')
+let bill = new BillModel("SG@mail.com", "jvozho564jci", date_payement, 5.5, 6);
+bill.insert()
+
 let date_naissance = new Date('2009-10-15')
 let user = new UserModel("Tuteur", 'SG@mail.com', 'bonjour', 'Steins', 'Gate', date_naissance, "Femme");
 
