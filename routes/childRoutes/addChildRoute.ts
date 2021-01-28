@@ -14,18 +14,28 @@ const addChild = opine();
 
 addChild.post("/user/child", emptyValueMiddleware, syntaxMiddleware, sessionMiddleware, roleMiddleware, async function (req, res) {
 
-    console.log(req.body)
+    let optionnalData = {
+        tuteur: req.body.emailToken
+    }
+    let date_naissance = new Date(req.body.date_naissance)
+    let userM = new UserModel('Enfant', req.body.email, req.body.password, req.body.lastname, req.body.firstname, date_naissance, req.body.sexe, optionnalData);
+
+    if (await userM.checkEmail(req.body.email) != true)
+    {
+        sendReturn(res, 409, {
+            error: true,
+            message: "Un compte utilisant cette adresse mail est déjà enregistré"
+        })
+        
+    }
+    else
+    {
     let userT : UserModelInterface = await UserModel.getUser(req.body.emailToken)
     if (userT.nbChild < 3) {
         userT.addChild()
         // Add child
-        let optionnalData = {
-            tuteur: req.body.emailToken
-        }
-        let date_naissance = new Date(req.body.date_naissance)
-        let userM = new UserModel('Enfant', req.body.email, req.body.password, req.body.lastname, req.body.firstname, date_naissance, req.body.sexe, optionnalData);
-
         userM.insert();
+            
 
         let user = {
             firstname: userM.firstname,
@@ -37,6 +47,7 @@ addChild.post("/user/child", emptyValueMiddleware, syntaxMiddleware, sessionMidd
             updateAt: userM.updateAt,
             subscription: userM.subscription
         }
+        res.status = 201
         res.send({
             error: false,
             message: "Votre enfant a bien été créé avec succès",
@@ -50,6 +61,7 @@ addChild.post("/user/child", emptyValueMiddleware, syntaxMiddleware, sessionMidd
             message: "Vous avez dépassé le cota de trois enfants"
         })
     }
+}
 
 });
 

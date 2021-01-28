@@ -10,7 +10,7 @@ import { hash } from '../helpers/password.helper.ts'
 import * as jwt from '../helpers/jwt.helper.ts'
 
 export class UserModel extends UserDB {
-    
+
     role: roleTypes;
     email: string
     lastname: string
@@ -19,7 +19,7 @@ export class UserModel extends UserDB {
     date_naissance: Date
     sexe: sexeTypes
 
-    
+
     createdAt: Date
     updateAt: Date
     subscription: subscribeTypes
@@ -43,19 +43,17 @@ export class UserModel extends UserDB {
         this.sexe = sexe;
 
         // Optionnal parameters (not required for an user insert)
-        if (optionnalData)
-        {
+        if (optionnalData) {
             this.createdAt = optionnalData.createdAt != undefined ? optionnalData.createdAt : new Date(Date.now())
             this.updateAt = optionnalData.updateAt != undefined ? optionnalData.updateAt : new Date(Date.now())
             this.subscription = optionnalData.subscription != undefined ? optionnalData.subscription : 0
             this.token = optionnalData.token != undefined ? optionnalData.token : ""
             this.nbTry = optionnalData.nbTry != undefined ? optionnalData.nbTry : 0
-            this.cooldownDate = optionnalData.cooldownDate != undefined ? optionnalData.cooldownDate :  new Date(Date.parse('01 Jan 1970 00:00:00'))
-            this.nbChild = optionnalData.nbChild != undefined ? optionnalData.nbChild :  0
-            this.tuteur = optionnalData.tuteur != undefined ? optionnalData.tuteur :  ""
+            this.cooldownDate = optionnalData.cooldownDate != undefined ? optionnalData.cooldownDate : new Date(Date.parse('01 Jan 1970 00:00:00'))
+            this.nbChild = optionnalData.nbChild != undefined ? optionnalData.nbChild : 0
+            this.tuteur = optionnalData.tuteur != undefined ? optionnalData.tuteur : ""
         }
-        else
-        {
+        else {
             this.createdAt = new Date(Date.now())
             this.updateAt = new Date(Date.now())
             this.subscription = 0
@@ -65,44 +63,44 @@ export class UserModel extends UserDB {
             this.nbChild = 0
             this.tuteur = ""
         }
-        
+
     }
 
     // Get user and create a userModel object directly
     static async getUser(email: string) {
         const userdb = db.collection("user")
         //const test = new UserModel()
-        const result:any = await userdb.findOne({ email: email });
-            // Check if this email is already used
-            if (result != undefined) {
-                const optionnalData = {
-                    updateAt: result.updateAt,
-                    subscription: result.subscription,
-                    token: result.token,
-                    nbTry: result.nbTry,
-                    cooldownDate: result.cooldownDate,
-                    nbChild: result.nbChild,
-                    tuteur: result.tuteur
-                }
-                return new UserModel(result.role, result.email, result.password, result.lastname, result.firstname, result.date_naissance, result.sexe, optionnalData)
+        const result: any = await userdb.findOne({ email: email });
+        // Check if this email is already used
+        if (result != undefined) {
+            const optionnalData = {
+                updateAt: result.updateAt,
+                subscription: result.subscription,
+                token: result.token,
+                nbTry: result.nbTry,
+                cooldownDate: result.cooldownDate,
+                nbChild: result.nbChild,
+                tuteur: result.tuteur
             }
-            else
-                throw new Error('User doesnt exist');
+            return new UserModel(result.role, result.email, result.password, result.lastname, result.firstname, result.date_naissance, result.sexe, optionnalData)
+        }
+        else
+            throw new Error('User doesnt exist');
     }
 
     async updateUserToken() {
-            let token = await jwt.getAuthToken(this.email)
-            this.token = token
-            await this.userdb.updateOne(
-                { email: this.email },
-                { $set: { token: this.token } }
-            );
+        let token = await jwt.getAuthToken(this.email)
+        this.token = token
+        await this.userdb.updateOne(
+            { email: this.email },
+            { $set: { token: this.token } }
+        );
     }
 
     getRole() {
         return this.role;
     }
-    
+
     setRole(role: roleTypes) {
         this.role = role;
     }
@@ -112,8 +110,7 @@ export class UserModel extends UserDB {
         return Math.abs(ageDate.getUTCFullYear() - 1970);
     }
     async addChild() {
-        if (this.nbChild != undefined)
-        {
+        if (this.nbChild != undefined) {
             this.nbChild = this.nbChild + 1
             await this.userdb.updateOne(
                 { email: this.email },
@@ -122,8 +119,7 @@ export class UserModel extends UserDB {
         }
     }
     async removeChild() {
-        if (this.nbChild != undefined)
-        {
+        if (this.nbChild != undefined) {
             this.nbChild = this.nbChild - 1
             await this.userdb.updateOne(
                 { email: this.email },
@@ -136,22 +132,23 @@ export class UserModel extends UserDB {
         // Test if it's a valid email
         const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         if (!reg.test(email.toLowerCase().trim())) {
-            return {error: false, message: "incorrect email"}
+            return { error: false, message: "incorrect email" }
         }
         else {
-            const result = await this.userdb.findOne({ email: email });
+            const result: any = await this.userdb.findOne({ email: email });
             // Check if this email is already used
             if (result == undefined) {
                 return true
             }
             else {
-                return {error: false, message: "already used email"}
+                return { error: false, message: "already used email" }
             }
         }
     }
 
     // Insert current user
     async insert() {
+
         // Hash password
         const hPass = await hash(this.password)
         console.log(hPass)
@@ -164,7 +161,7 @@ export class UserModel extends UserDB {
             sexe: this.sexe,
 
             role: this.role,
-            subscription:  this.subscription,
+            subscription: this.subscription,
             createdAt: this.createdAt,
             updateAt: this.updateAt,
             token: this.token,
@@ -173,6 +170,7 @@ export class UserModel extends UserDB {
             nbChild: this.nbChild,
             tuteur: this.tuteur
         });
+
     }
 
 

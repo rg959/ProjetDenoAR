@@ -3,7 +3,7 @@ import { Request, Response } from "https://deno.land/x/opine@1.0.2/src/types.ts"
 import { sendReturn } from "../../helpers/sendReturn.helper.ts"
 
 import { emptyMailPasswordMiddleware } from "../../middlewares/emptyMailPasswordMiddleware.ts";
-import { syntaxMiddleware } from "../../middlewares/syntaxMiddleware.ts"
+import { syntaxMiddlewareV } from "../../middlewares/syntaxMiddlewareV.ts"
 import { comparePass } from "../../helpers/password.helper.ts"
 import { UserModel } from '../../models/UserModel.ts';
 
@@ -16,9 +16,9 @@ const login = opine();
 
 
 
-login.post("/login", emptyMailPasswordMiddleware, syntaxMiddleware, async  function (req, res) {
+login.post("/login", emptyMailPasswordMiddleware, syntaxMiddlewareV, async  function (req, res) {
     // NEED TO BE CHANGED
-    const result:any = await userdb.findOne({ email: req.body.emailToken });
+    const result:any = await userdb.findOne({ email: req.body.email });
     if (result == undefined)
     {
         sendReturn(res, 400, {
@@ -40,11 +40,15 @@ login.post("/login", emptyMailPasswordMiddleware, syntaxMiddleware, async  funct
                         email: result.email,
                         sexe: result.sexe,
                         role: result.role,
-                        dateNaissance: result.date_naissance
+                        dateNaissance: result.date_naissance,
+                        createdAt: result.createdAt,
+                        updateAt: result.updateAt,
+                        subscription: result.subscription
                     }
                     res.status = 200
                     res.send({
                         error: false,
+                        message: "L'utilisateur a été authentifié succès",
                         user: user,
                         token: userM.token
                     })

@@ -18,7 +18,6 @@ listBill.get("/bills", sessionMiddleware, roleMiddleware, async function (req, r
         result[i].id = result[i]._id.toString()
         delete result[i]['_id'];
         delete result[i]['buyer'];
-
     }
     
     //console.log(result)
