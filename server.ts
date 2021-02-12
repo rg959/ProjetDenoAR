@@ -15,7 +15,6 @@ router
   .get("/register", register)
   .post("/login", postLogin)
   .post("/register", postRegister)
-  .get("/protected", authMiddleware, protectedRoute)
   .get("/logout", logout);
 
 app.addEventListener('error', evt => {

@@ -84,13 +84,6 @@ export const postRegister = async (ctx: RouterContext) => {
   ctx.response.redirect('/login');
 }
 
-export const protectedRoute = async (ctx: RouterContext) => {
-  ctx.response.body = await renderFileToString(
-    `${Deno.cwd()}/views/protected.ejs`,
-    {},
-  );
-}
-
 export const logout = async (ctx: RouterContext) => {
   ctx.cookies.delete('jwt');
   ctx.response.redirect('/');
