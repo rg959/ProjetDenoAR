@@ -13,6 +13,8 @@ emptyValueMiddleware.use(function (req, res, next) {
                 (req.body.email != undefined && req.body.email == "") ||
                 (req.body.password != undefined && req.body.password == "") ||
                 (req.body.date_naissance != undefined && req.body.date_naissance == "") ||
+                (req.body.id_carte != undefined && req.body.id_carte == "") ||
+                (req.body.cvc != undefined && req.body.cvc == "") ||
                 (req.body.sexe != undefined && req.body.sexe == "")
     }
     if (checkSendedValue())

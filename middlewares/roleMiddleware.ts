@@ -1,10 +1,13 @@
 import { opine } from "https://deno.land/x/opine@1.0.2/mod.ts";
 
 import { sendReturn } from "../helpers/sendReturn.helper.ts"
+
 import { UserModel } from '../models/UserModel.ts'
+import UserModelInterface from "../interfaces/UserInterfaces.ts";
 
 import { db } from '../db/db.ts';
-import UserModelInterface from "../interfaces/UserInterfaces.ts";
+
+
 const userdb = db.collection("user")
 
 

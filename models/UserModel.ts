@@ -5,7 +5,7 @@ import { roleTypes } from '../types/rolesTypes.ts'
 import { sexeTypes } from '../types/sexeTypes.ts'
 import { subscribeTypes } from '../types/subscribeTypes.ts'
 // Import interfaces
-import cardInterface from '../interfaces/cardInterface.ts'
+import cardInterface from '../interfaces/CardInterface.ts'
 
 // Import helpers
 import { hash } from '../helpers/password.helper.ts'
@@ -25,6 +25,8 @@ export class UserModel extends UserDB {
     createdAt: Date
     updateAt: Date
     subscription: subscribeTypes
+    firstSubscription: Boolean
+    subscriptionDate: Date
     token: string
     nbTry: number
     cooldownDate: Date
@@ -49,6 +51,8 @@ export class UserModel extends UserDB {
             this.createdAt = optionnalData.createdAt != undefined ? optionnalData.createdAt : new Date(Date.now())
             this.updateAt = optionnalData.updateAt != undefined ? optionnalData.updateAt : new Date(Date.now())
             this.subscription = optionnalData.subscription != undefined ? optionnalData.subscription : 0
+            this.firstSubscription = optionnalData.firstSubscription != undefined ? optionnalData.firstSubscription : true
+            this.subscriptionDate = optionnalData.subscriptionDate != undefined ? optionnalData.subscriptionDate : new Date(Date.parse('01 Jan 1970 00:00:00'))
             this.token = optionnalData.token != undefined ? optionnalData.token : ""
             this.nbTry = optionnalData.nbTry != undefined ? optionnalData.nbTry : 0
             this.cooldownDate = optionnalData.cooldownDate != undefined ? optionnalData.cooldownDate : new Date(Date.parse('01 Jan 1970 00:00:00'))
@@ -59,6 +63,8 @@ export class UserModel extends UserDB {
             this.createdAt = new Date(Date.now())
             this.updateAt = new Date(Date.now())
             this.subscription = 0
+            this.firstSubscription = true
+            this.subscriptionDate = new Date(Date.parse('01 Jan 1970 00:00:00'))
             this.token = ""
             this.nbTry = 0
             this.cooldownDate = new Date(Date.parse('01 Jan 1970 00:00:00'))
@@ -78,6 +84,8 @@ export class UserModel extends UserDB {
             const optionnalData = {
                 updateAt: result.updateAt,
                 subscription: result.subscription,
+                firstSubscription: result.firstSubscription,
+                subscriptionDate: result.subscriptionDate,
                 token: result.token,
                 nbTry: result.nbTry,
                 cooldownDate: result.cooldownDate,
@@ -130,6 +138,25 @@ export class UserModel extends UserDB {
         }
     }
 
+    async useFirstSubscription() {
+        this.firstSubscription = false
+        var currentTime = new Date();
+        this.subscriptionDate = new Date(currentTime.getTime() + 5*60000);
+            await this.userdb.updateOne(
+                { email: this.email },
+                { $set: { firstSubscription: this.firstSubscription, subscriptionDate: this.subscriptionDate } }
+            );
+    }
+
+    async updateSubscriptionDate(nbMinutes: number) {
+        var currentTime = new Date();
+        this.subscriptionDate = new Date(currentTime.getTime() + nbMinutes*60000);
+            await this.userdb.updateOne(
+                { email: this.email },
+                { $set: { subscriptionDate: this.subscriptionDate } }
+            );
+    }
+
     public async checkEmail(email: string) {
         // Test if it's a valid email
         const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -150,7 +177,6 @@ export class UserModel extends UserDB {
 
     // Insert current user
     async insert() {
-
         // Hash password
         const hPass = await hash(this.password)
         console.log(hPass)
@@ -164,6 +190,8 @@ export class UserModel extends UserDB {
 
             role: this.role,
             subscription: this.subscription,
+            firstSubscription: this.firstSubscription,
+            subscriptionDate: this.subscriptionDate,
             createdAt: this.createdAt,
             updateAt: this.updateAt,
             token: this.token,

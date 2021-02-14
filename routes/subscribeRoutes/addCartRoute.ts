@@ -3,7 +3,7 @@ import { sendReturn } from "../../helpers/sendReturn.helper.ts"
 import { config } from '../../config/config.ts';
 
 import { CardModel } from '../../models/CardModel.ts'
-import cardModelInterface from "../../interfaces/cardInterface.ts";
+import cardModelInterface from "../../interfaces/CardInterface.ts";
 
 import { emptyValueMiddleware } from "../../middlewares/emptyValueMiddleware.ts";
 import { syntaxMiddleware } from "../../middlewares/syntaxMiddleware.ts";
@@ -11,13 +11,13 @@ import { sessionMiddleware } from "../../middlewares/sessionMiddleware.ts"
 import { roleMiddleware } from "../../middlewares/roleMiddleware.ts";
 import { invalidCardMiddleware } from "../../middlewares/invalidCardMiddleware.ts";
 import { cardExistMiddleware } from "../../middlewares/cardExistMiddleware.ts";
-//import { cardAlreadyExistMiddleware } from "../../middlewares/cardAlreadyExistMiddleware.ts";
+import { cardAlreadyExistMiddleware } from "../../middlewares/cardAlreadyExistMiddleware.ts";
 
 const addCart = opine();
 
 const { STRIPESKEY } = config;
 
-addCart.put("/user/cart", sessionMiddleware, cardExistMiddleware, /*cardAlreadyExistMiddleware,*/ invalidCardMiddleware, roleMiddleware, syntaxMiddleware, async function (req, res) {
+addCart.put("/user/cart", sessionMiddleware, cardExistMiddleware, cardAlreadyExistMiddleware, invalidCardMiddleware, roleMiddleware, syntaxMiddleware, async function (req, res) {
     var myHeaders: any = new Headers();
     myHeaders.append("Authorization", "Basic " + btoa(STRIPESKEY));
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -56,18 +56,13 @@ addCart.put("/user/cart", sessionMiddleware, cardExistMiddleware, /*cardAlreadyE
     else
     {
         // Add card to the BDD
-        let card = new CardModel((Math.floor(Math.random() * Math.floor(9000000000))).toString(), req.body.email, req.body.cartNumber, req.body.month, req.body.year, req.body.default)
+        let card = new CardModel((Math.floor(Math.random() * Math.floor(9000000000))).toString(), req.body.emailToken, req.body.cartNumber, req.body.month, req.body.year, req.body.default)
         card.insert()
         sendReturn(res, 200, {
             error: false,
             message: "Vos données ont été mises à jour"
         })
     }
-        
-
-
-
-
 });
 
 export { addCart }

@@ -16,6 +16,8 @@ export default interface UserModelInterface {
     createdAt: Date
     updateAt: Date
     subscription: subscribeTypes
+    firstSubscription: Boolean
+    subscriptionDate: Date
     token: string
     nbTry: number
     cooldownDate: Date
@@ -29,6 +31,8 @@ export default interface UserModelInterface {
     addChild() : void
     removeChild() : void
     checkEmail(email: string) : any
+    useFirstSubscription() : void
+    updateSubscriptionDate(nbMinutes: number) : void
     insert() : void
     update() : void
     delete() : void
