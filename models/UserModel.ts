@@ -1,9 +1,11 @@
 import { UserDB } from '../db/UserBD.ts';
 import { db } from '../db/db.ts';
-// Import roles
+// Import types
 import { roleTypes } from '../types/rolesTypes.ts'
 import { sexeTypes } from '../types/sexeTypes.ts'
 import { subscribeTypes } from '../types/subscribeTypes.ts'
+// Import interfaces
+import cardInterface from '../interfaces/cardInterface.ts'
 
 // Import helpers
 import { hash } from '../helpers/password.helper.ts'
