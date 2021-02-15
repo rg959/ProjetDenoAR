@@ -8,9 +8,10 @@ import { sessionMiddleware } from "../../middlewares/sessionMiddleware.ts"
 import { roleMiddleware } from "../../middlewares/roleMiddleware.ts";
 
 import { UserModel } from '../../models/UserModel.ts'
+import UserModelInterface from "../../interfaces/UserInterfaces.ts";
 
 import { db } from '../../db/db.ts';
-import UserModelInterface from "../../interfaces/UserInterfaces.ts";
+
 
 const userdb = db.collection("user")
 
@@ -35,11 +36,6 @@ deleteChild.delete("/user/child", emptyValueMiddleware, syntaxMiddleware, sessio
             message: "Vous ne pouvez pas supprimer cet enfant"
         })
     }
-
-    
-    
-    
-    
 });
 
 export { deleteChild }

@@ -46,5 +46,8 @@ routes.use('/', deleteUser)
 import { editUser } from './userRoutes/editUserRoute.ts';
 routes.use('/', editUser)
 
+// Admin test route
+import { admin } from './adminRoutes/adminRoute.ts';
+routes.use('/', admin)
 
 export { routes }
