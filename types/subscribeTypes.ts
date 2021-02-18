@@ -1,0 +1,1 @@
+export type subscribeTypes = 0 | 1 | 2;
