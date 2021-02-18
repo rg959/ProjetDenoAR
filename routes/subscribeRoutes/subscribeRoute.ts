@@ -125,13 +125,13 @@ let userT: UserModelInterface = await UserModel.getUser(req.body.emailToken)
                 redirect: 'follow'
             };
 
-            const subcription = await fetch("https://api.stripe.com/v1/subscriptions", requestOptions)
-            const sub = await subcription.json()
+            const responseSubscriptions = await fetch("https://api.stripe.com/v1/subscriptions", requestOptions)
+            const subscriptions = await responseSubscriptions.json()
 
             //console.log("subscriptions")
-            //console.log(sub)
+            //console.log(subscriptions)
 
-            if (sub.error) {
+            if (subscriptions.error) {
                 
             }
             else {
@@ -140,7 +140,7 @@ let userT: UserModelInterface = await UserModel.getUser(req.body.emailToken)
 
                 //Create bill
                 let currentTime = new Date();
-                let bill = new BillModel("SG@mail.com", sub.id, currentTime, 1, 1);
+                let bill = new BillModel(req.body.emailToken, subscriptions.id, currentTime, 1, 1);
                 await bill.insert()
 
                 
@@ -260,13 +260,13 @@ subscribe.put("/subscribe", emptyValueMiddleware, sessionMiddleware, roleMiddlew
                         redirect: 'follow'
                     };
 
-                    const subcription = await fetch("https://api.stripe.com/v1/subscriptions", requestOptions)
-                    const sub = await subcription.json()
+                    const responseSubscriptions = await fetch("https://api.stripe.com/v1/subscriptions", requestOptions)
+                    const subscriptions = await responseSubscriptions.json()
 
                     //console.log("subscriptions")
-                    //console.log(sub)
+                    //console.log(subscriptions)
 
-                    if (sub.error) {
+                    if (subscriptions.error) {
                         sendReturn(res, 402, {
                             error: false,
                             message: "Echec du payement de l'offre"
@@ -278,7 +278,7 @@ subscribe.put("/subscribe", emptyValueMiddleware, sessionMiddleware, roleMiddlew
 
                         //Create bill
                         let currentTime = new Date();
-                        let bill = new BillModel("SG@mail.com", sub.id, currentTime, 1, 1);
+                        let bill = new BillModel(req.body.emailToken, subscriptions.id, currentTime, 1, 1);
                         await bill.insert()
 
                         sendReturn(res, 200, {
