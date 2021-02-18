@@ -16,8 +16,12 @@ const header : any = {
 };
 
 const getAuthToken = async (iData: string) => {
+    var currentTime = new Date();
+    var newDateObj = new Date(currentTime.getTime() + 5*60000);
+
     const payload = {
-        email: iData
+        email: iData,
+        exp: newDateObj.getTime()
     };
 
     return await create(header, payload, JWT_TOKEN_SECRET);
@@ -26,10 +30,15 @@ const getAuthToken = async (iData: string) => {
 
 const getJwtPayload = async(token: string): Promise < any | null > => {
     try {
-        const jwtObject = await verify(token, JWT_TOKEN_SECRET, header.alg);
+        const jwtObject:any = await verify(token, JWT_TOKEN_SECRET, header.alg);
         console.log(jwtObject)
         if (jwtObject) {
-            return jwtObject;
+            // Check if token is not expired
+            let currentTime = new Date();
+            if (jwtObject.exp > currentTime.getTime())
+                return jwtObject;
+            else
+                return null;
         }
     } catch (err) {}
     return null;
