@@ -1,0 +1,3207 @@
+{
+	"info": {
+		"_postman_id": "7d2de836-a803-400b-b94c-46791a516af1",
+		"name": "ProjetDenoAR",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentification",
+			"item": [
+				{
+					"name": "Register",
+					"item": [
+						{
+							"name": "Register",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "firstname",
+											"value": "Alaixi",
+											"type": "text"
+										},
+										{
+											"key": "lastname",
+											"value": "Savoa",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "alexis.savoie@free.fr",
+											"type": "text"
+										},
+										{
+											"key": "sexe",
+											"value": "Homme",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text"
+										},
+										{
+											"key": "date_naissance",
+											"value": "1997-07-26",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/register",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "Login Tuteur + set token tuteur",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 200\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.environment.set(\"tokenTuteur\", jsonData.token);\r",
+											"    pm.response.to.have.status(200); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = L'utilisateur a été authentifié succès\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"L'utilisateur a été authentifié succès\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "{{emailUser}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/login",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"login"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login Enfant + set token enfant",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 200\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.environment.set(\"tokenEnfant\", jsonData.token);\r",
+											"    pm.response.to.have.status(200); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = L'utilisateur a été authentifié succès\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"L'utilisateur a été authentifié succès\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "theo.kevin@mail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/login",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"login"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "testToken (middlewareSession)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Bonjour ProjetDenoAR (connected)\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Bonjour ProjetDenoAR (connected)\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{tokenTuteur}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "{{emailUser}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:8001/testToken",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8001",
+									"path": [
+										"testToken"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login Donnée manquante",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 400\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.response.to.have.status(400); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Email/password manquants\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Email/password manquants\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "{{emailUser}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/login",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"login"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login Email invalide",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 400\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.response.to.have.status(400); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Email/password incorrect\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Email/password incorrect\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "alexis.savoie.555gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/login",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"login"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login Mot de passe trop court",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 400\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.response.to.have.status(400); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Email/password incorrect\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Email/password incorrect\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "{{emailUser}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "bonj",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/login",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"login"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "ChildRoutes",
+			"item": [
+				{
+					"name": "listChild",
+					"item": [
+						{
+							"name": "listChild (token tuteur)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 200\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.response.to.have.status(200); \r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"error = false\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.error).to.eql(false);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "{{emailUser}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/child",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"child"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "listChild (mauvais token)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 401\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.response.to.have.status(401); \r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"message = Votre token n'est pas correct\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Votre token n'est pas correct\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{badToken}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "{{emailUser}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/child",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"child"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "listChild (token enfant)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 403\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.response.to.have.status(403); \r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"message = Vos droits d'accès ne permettent pas d'accéder à la ressource\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Vos droits d'accès ne permettent pas d'accéder à la ressource\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenEnfant}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "{{emailUser}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/child",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"child"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "addChild",
+					"item": [
+						{
+							"name": "addChild (token tuteur)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 201\", function () {\r",
+											"    pm.response.to.have.status(201); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Votre enfant a bien été créé avec succès\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Votre enfant a bien été créé avec succès\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "firstname",
+											"value": "Théo",
+											"type": "text"
+										},
+										{
+											"key": "lastname",
+											"value": "Kevin2",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "theo.kevin2@mail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text"
+										},
+										{
+											"key": "date_naissance",
+											"value": "1999-01-01",
+											"type": "text"
+										},
+										{
+											"key": "sexe",
+											"value": "Homme",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/child",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"child"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "addChild (Donnée manquante)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 400\", function () {\r",
+											"    pm.response.to.have.status(400); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Une ou plusieurs données obligatoire sont manquantes\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Une ou plusieurs données obligatoire sont manquantes\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "firstname",
+											"value": "Théo",
+											"type": "text"
+										},
+										{
+											"key": "lastname",
+											"value": "Kevin2",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "theo.kevin2@mail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text"
+										},
+										{
+											"key": "date_naissance",
+											"value": "1999-01-01",
+											"type": "text"
+										},
+										{
+											"key": "sexe",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/child",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"child"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "addChild (token incorrect)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 401\", function () {\r",
+											"    pm.response.to.have.status(401); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Votre token n'est pas correct\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Votre token n'est pas correct\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{badToken}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "firstname",
+											"value": "Théo",
+											"type": "text"
+										},
+										{
+											"key": "lastname",
+											"value": "Kevin2",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "theo.kevin2@mail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text"
+										},
+										{
+											"key": "date_naissance",
+											"value": "1999-01-01",
+											"type": "text"
+										},
+										{
+											"key": "sexe",
+											"value": "Homme",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/child",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"child"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "addChild (token enfant)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 403\", function () {\r",
+											"    pm.response.to.have.status(403); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Vos droits d'accès ne permettent pas d'accéder à la ressource\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Vos droits d'accès ne permettent pas d'accéder à la ressource\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenEnfant}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "firstname",
+											"value": "Théo",
+											"type": "text"
+										},
+										{
+											"key": "lastname",
+											"value": "Kevin2",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "theo.kevin2@mail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text"
+										},
+										{
+											"key": "date_naissance",
+											"value": "1999-01-01",
+											"type": "text"
+										},
+										{
+											"key": "sexe",
+											"value": "Homme",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/child",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"child"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "addChild (Donnée non conforme)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 409\", function () {\r",
+											"    pm.response.to.have.status(409); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Une ou plusieurs données sont erronées\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Une ou plusieurs données sont erronées\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "firstname",
+											"value": "Théo",
+											"type": "text"
+										},
+										{
+											"key": "lastname",
+											"value": "Kevin2",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "theo.kevin2mail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text"
+										},
+										{
+											"key": "date_naissance",
+											"value": "1999-01-01",
+											"type": "text"
+										},
+										{
+											"key": "sexe",
+											"value": "Homme",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/child",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"child"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "addChild (Email existe)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 409\", function () {\r",
+											"    pm.response.to.have.status(409); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Un compte utilisant cette adresse mail est déjà enregistré\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Un compte utilisant cette adresse mail est déjà enregistré\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "firstname",
+											"value": "Théo",
+											"type": "text"
+										},
+										{
+											"key": "lastname",
+											"value": "Kevin2",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "theo.kevin2@mail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text"
+										},
+										{
+											"key": "date_naissance",
+											"value": "1999-01-01",
+											"type": "text"
+										},
+										{
+											"key": "sexe",
+											"value": "Homme",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/child",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"child"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "addChild (membre 3)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 201\", function () {\r",
+											"    pm.response.to.have.status(201); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Votre enfant a bien été créé avec succès\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Votre enfant a bien été créé avec succès\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "firstname",
+											"value": "Théo",
+											"type": "text"
+										},
+										{
+											"key": "lastname",
+											"value": "Kevin3",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "theo.kevin3@mail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text"
+										},
+										{
+											"key": "date_naissance",
+											"value": "1999-01-01",
+											"type": "text"
+										},
+										{
+											"key": "sexe",
+											"value": "Homme",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/child",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"child"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "addChild (Cota de 3 enfants dépassé)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 409\", function () {\r",
+											"    pm.response.to.have.status(409); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Vous avez dépassé le cota de trois enfants\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Vous avez dépassé le cota de trois enfants\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "firstname",
+											"value": "Théo",
+											"type": "text"
+										},
+										{
+											"key": "lastname",
+											"value": "Kevin4",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "theo.kevin4@mail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text"
+										},
+										{
+											"key": "date_naissance",
+											"value": "1999-01-01",
+											"type": "text"
+										},
+										{
+											"key": "sexe",
+											"value": "Homme",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/child",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"child"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "(admin) remove extra child 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 200\", function () {\r",
+											"    pm.response.to.have.status(200); \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "admin_key",
+											"value": "{{ADMINKEY}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "theo.kevin3@mail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "date_naissance",
+											"value": "1999-01-01",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "sexe",
+											"value": "Homme",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/admin/deleteChildTest",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"admin",
+										"deleteChildTest"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "deleteChild",
+					"item": [
+						{
+							"name": "(admin) get child id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 200\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.environment.set(\"id_child\", jsonData.id);\r",
+											"    pm.response.to.have.status(200); \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "admin_key",
+											"value": "{{ADMINKEY}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "theo.kevin2@mail.com",
+											"type": "text"
+										},
+										{
+											"key": "lastname",
+											"value": "Kevin",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "date_naissance",
+											"value": "1999-01-01",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "sexe",
+											"value": "Homme",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "id_child",
+											"value": "600552edc328542837f16db7",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/admin/getChildID",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"admin",
+										"getChildID"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteChild (Succès token tuteur)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 200\", function () {\r",
+											"    pm.response.to.have.status(200); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = L'utilisateur a été supprimée avec succès\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"L'utilisateur a été supprimée avec succès\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "firstname",
+											"value": "Théo",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "lastname",
+											"value": "Kevin",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "email",
+											"value": "theo.kevin@mail.com",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "date_naissance",
+											"value": "1999-01-01",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "sexe",
+											"value": "Homme",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "id_child",
+											"value": "{{id_child}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/child",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"child"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteChild (token incorrect)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 401\", function () {\r",
+											"    pm.response.to.have.status(401); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Votre token n'est pas correct\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Votre token n'est pas correct\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{badToken}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "firstname",
+											"value": "Théo",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "lastname",
+											"value": "Kevin",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "email",
+											"value": "theo.kevin@mail.com",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "date_naissance",
+											"value": "1999-01-01",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "sexe",
+											"value": "Homme",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "id_child",
+											"value": "{{id_child}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/child",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"child"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteChild (Token enfant)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 403\", function () {\r",
+											"    pm.response.to.have.status(403); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Vos droits d'accès ne permettent pas d'accéder à la ressource\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Vos droits d'accès ne permettent pas d'accéder à la ressource\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenEnfant}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "firstname",
+											"value": "Théo",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "lastname",
+											"value": "Kevin",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "email",
+											"value": "theo.kevin@mail.com",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "date_naissance",
+											"value": "1999-01-01",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "sexe",
+											"value": "Homme",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "id_child",
+											"value": "{{id_child}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/child",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"child"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteChild (id incorrect)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 403\", function () {\r",
+											"    pm.response.to.have.status(403); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Vous ne pouvez pas supprimer cet enfant\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Vous ne pouvez pas supprimer cet enfant\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "firstname",
+											"value": "Théo",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "lastname",
+											"value": "Kevin",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "email",
+											"value": "theo.kevin@mail.com",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "date_naissance",
+											"value": "1999-01-01",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "sexe",
+											"value": "Homme",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "id_child",
+											"value": "600552edc328542837f16db8",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/child",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"child"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Subscribe",
+			"item": [
+				{
+					"name": "addCart",
+					"item": [
+						{
+							"name": "addCard (invalid token)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 401\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.response.to.have.status(401); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Votre token n'est pas correct\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Votre token n'est pas correct\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{badToken}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "cartNumber",
+											"value": "4242424242424242",
+											"type": "text"
+										},
+										{
+											"key": "month",
+											"value": "10",
+											"type": "text"
+										},
+										{
+											"key": "year",
+											"value": "30",
+											"type": "text"
+										},
+										{
+											"key": "default",
+											"value": "true",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/cart",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"cart"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "addCard (invalid role)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 403\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.response.to.have.status(403); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Vos droits d'accès ne permettent pas d'accéder à la ressource\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Vos droits d'accès ne permettent pas d'accéder à la ressource\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenEnfant}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "cartNumber",
+											"value": "4242424242424242",
+											"type": "text"
+										},
+										{
+											"key": "month",
+											"value": "10",
+											"type": "text"
+										},
+										{
+											"key": "year",
+											"value": "30",
+											"type": "text"
+										},
+										{
+											"key": "default",
+											"value": "true",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/cart",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"cart"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "addCard card doesn't exist)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 402\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.response.to.have.status(402); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"error = true\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.error).to.eql(true);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Informations bancaire incorrectes\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Informations bancaire incorrectes\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "cartNumber",
+											"value": "4242424242424243",
+											"type": "text"
+										},
+										{
+											"key": "month",
+											"value": "10",
+											"type": "text"
+										},
+										{
+											"key": "year",
+											"value": "2030",
+											"type": "text"
+										},
+										{
+											"key": "default",
+											"value": "123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/cart",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"cart"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "addCard (invalid card)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 403\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.response.to.have.status(403); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Veuillez compléter votre profil avec une carte de crédit\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Veuillez compléter votre profil avec une carte de crédit\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "cartNumber",
+											"value": "424242424242424",
+											"type": "text"
+										},
+										{
+											"key": "month",
+											"value": "10",
+											"type": "text"
+										},
+										{
+											"key": "year",
+											"value": "30",
+											"type": "text"
+										},
+										{
+											"key": "default",
+											"value": "true",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/cart",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"cart"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "addCard (success)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 200\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.response.to.have.status(200); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Vos données ont été mises à jour\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Vos données ont été mises à jour\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "cartNumber",
+											"value": "4242424242424242",
+											"type": "text"
+										},
+										{
+											"key": "month",
+											"value": "10",
+											"type": "text"
+										},
+										{
+											"key": "year",
+											"value": "30",
+											"type": "text"
+										},
+										{
+											"key": "default",
+											"value": "true",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/cart",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"cart"
+									]
+								},
+								"description": "Supprimer l'utilisateur si jamais le test ne foncitonne pas"
+							},
+							"response": []
+						},
+						{
+							"name": "addCard (card already exists)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 409\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.response.to.have.status(409); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = La carte existe déjà\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"La carte existe déjà\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "cartNumber",
+											"value": "4242424242424242",
+											"type": "text"
+										},
+										{
+											"key": "month",
+											"value": "10",
+											"type": "text"
+										},
+										{
+											"key": "year",
+											"value": "30",
+											"type": "text"
+										},
+										{
+											"key": "default",
+											"value": "true",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/user/cart",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"user",
+										"cart"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "subscribe",
+					"item": [
+						{
+							"name": "subscribe (badToken)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 401\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.response.to.have.status(401); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Votre token n'est pas correct\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Votre token n'est pas correct\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{badToken}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "id_carte",
+											"value": "4907766824",
+											"type": "text"
+										},
+										{
+											"key": "cvc",
+											"value": "123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/subscribe",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"subscribe"
+									],
+									"query": [
+										{
+											"key": "id_carte",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "cvc",
+											"value": "123",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "subscribe (empty value)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 400\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.response.to.have.status(400); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Une ou plusieurs données obligatoire sont manquantes\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Une ou plusieurs données obligatoire sont manquantes\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{badToken}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "id_carte",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "cvc",
+											"value": "123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/subscribe",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"subscribe"
+									],
+									"query": [
+										{
+											"key": "id_carte",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "cvc",
+											"value": "123",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "subscribe (invalid id_carte or cvc)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 402\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.response.to.have.status(402); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Echec du payement de l'offre\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Echec du payement de l'offre\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "id_carte",
+											"value": "49077668245",
+											"type": "text"
+										},
+										{
+											"key": "cvc",
+											"value": "123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/subscribe",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"subscribe"
+									],
+									"query": [
+										{
+											"key": "id_carte",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "cvc",
+											"value": "123",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "subscribe not existing id_carte)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 402\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.response.to.have.status(402); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Echec du payement de l'offre\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Echec du payement de l'offre\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "id_carte",
+											"value": "4907766823",
+											"type": "text"
+										},
+										{
+											"key": "cvc",
+											"value": "123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/subscribe",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"subscribe"
+									],
+									"query": [
+										{
+											"key": "id_carte",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "cvc",
+											"value": "123",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "(admin) get card id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 200\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.environment.set(\"id_carte\", jsonData.id_carte);\r",
+											"    pm.response.to.have.status(200); \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "admin_key",
+											"value": "{{ADMINKEY}}",
+											"type": "text"
+										},
+										{
+											"key": "cartNumber",
+											"value": "4242424242424242",
+											"type": "text"
+										},
+										{
+											"key": "lastname",
+											"value": "Kevin",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "password",
+											"value": "bonjour",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "date_naissance",
+											"value": "1999-01-01",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "sexe",
+											"value": "Homme",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "id_child",
+											"value": "600552edc328542837f16db7",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/admin/getCardID",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"admin",
+										"getCardID"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "SG@mail.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "subscribe (first sub)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 200\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.response.to.have.status(200); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Votre période d'essai viens d'être activé - 5min\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Votre période d'essai viens d'être activé - 5min\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "id_carte",
+											"value": "{{id_carte}}",
+											"type": "text"
+										},
+										{
+											"key": "cvc",
+											"value": "123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/subscribe",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"subscribe"
+									],
+									"query": [
+										{
+											"key": "id_carte",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "cvc",
+											"value": "123",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "subscribe (success not the first sub)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 200\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.response.to.have.status(200); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"message = Votre abonnement a bien été mise à jour\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Votre abonnement a bien été mise à jour\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{tokenTuteur}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "id_carte",
+											"value": "{{id_carte}}",
+											"type": "text"
+										},
+										{
+											"key": "cvc",
+											"value": "123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/subscribe",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"subscribe"
+									],
+									"query": [
+										{
+											"key": "id_carte",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "cvc",
+											"value": "123",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "(admin) reset sub",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 200\", function () {\r",
+											"    pm.response.to.have.status(200); \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "admin_key",
+											"value": "{{ADMINKEY}}",
+											"type": "text"
+										},
+										{
+											"key": "cartNumber",
+											"value": "4242424242424242",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "cartEmail",
+											"value": "SG@mail.com",
+											"type": "text"
+										},
+										{
+											"key": "default",
+											"value": "true",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/admin/resetSubscription",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"admin",
+										"resetSubscription"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "(admin) delete card",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code = 200\", function () {\r",
+											"    pm.response.to.have.status(200); \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{tokenTuteur}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "admin_key",
+											"value": "{{ADMINKEY}}",
+											"type": "text"
+										},
+										{
+											"key": "cartNumber",
+											"value": "4242424242424242",
+											"type": "text"
+										},
+										{
+											"key": "cartEmail",
+											"value": "{{emailUser}}",
+											"type": "text"
+										},
+										{
+											"key": "default",
+											"value": "true",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/admin/deleteCardTest",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"admin",
+										"deleteCardTest"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Bills",
+			"item": [
+				{
+					"name": "listBills (succès token tuteur)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code = 200\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.environment.set(\"tokenTuteur\", jsonData.token);\r",
+									"    pm.response.to.have.status(200); \r",
+									"});\r",
+									"\r",
+									"pm.test(\"error = false\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.error).to.eql(false);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{tokenTuteur}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "SG@mail.com",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/bills",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"bills"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "SG@mail.com",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listBills (Token incorrect)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code = 401\", function () {\r",
+									"    pm.response.to.have.status(401); \r",
+									"});\r",
+									"\r",
+									"pm.test(\"message = Votre token n'est pas correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.eql(\"Votre token n'est pas correct\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{badToken}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "SG@mail.com",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/bills",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"bills"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "SG@mail.com",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listBills (token enfant)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code = 403\", function () {\r",
+									"    pm.response.to.have.status(403); \r",
+									"});\r",
+									"\r",
+									"pm.test(\"message = Vos droits d'accès ne permettent pas d'accéder à la ressource\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.eql(\"Vos droits d'accès ne permettent pas d'accéder à la ressource\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{tokenEnfant}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "SG@mail.com",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/bills",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"bills"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "SG@mail.com",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "__test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200); \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Test res.body.message\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.eql( \"Bonjour ProjetDenoAR\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "{{emailUser}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/test",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"test"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "SG@mail.com",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
